@@ -196,6 +196,11 @@ class Post
         return $this->image_name;
     }
 
+    public function getImageUrl()
+    {
+        return $this->getImageName();
+    }
+
     /**
      * Set created_on
      *

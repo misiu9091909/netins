@@ -14,8 +14,4 @@
     {% else %}
         <div class="well">{{ 'No posts found'|trans }}</div>
     {% endfor %}
-
-    <div class="navigation text-center">
-        {{ pagerfanta(posts, 'twitter_bootstrap3_translated', { routeName: 'microblog_posts_paginated' }) }}
-    </div>
 {% endblock %}

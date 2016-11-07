@@ -25,8 +25,8 @@ class PostRepository extends EntityRepository
             ->createQuery('
                 SELECT p
                 FROM AppBundle:Post p
-                WHERE p.publishedAt <= :now
-                ORDER BY p.publishedAt DESC
+                WHERE p.created_on <= :now
+                ORDER BY p.created_on DESC
             ')
             ->setParameter('now', new \DateTime())
             ;
@@ -39,10 +39,8 @@ class PostRepository extends EntityRepository
      */
     public function findLatest($page = 1, $items = 10)
     {
-        $paginator = new Pagerfanta(new DoctrineORMAdapter($this->queryLatest(), false));
-        $paginator->setMaxPerPage($items);
-        $paginator->setCurrentPage($page);
-
-        return $paginator;
+        $ormAdapter = new DoctrineORMAdapter($this->queryLatest(), false);
+        $posts = $ormAdapter->getSlice(($page - 1) * $items, $items);
+        return $posts;
     }
 }
