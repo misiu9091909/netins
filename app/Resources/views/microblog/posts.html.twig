@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% for post in posts %}
+        <article class="post">
+            <h2>
+                <a href="{{ path('microblog_single_post', { slug: post.slug }) }}">
+                    {{ post.title }}
+                </a>
+            </h2>
+
+            {{ post.body }}
+        </article>
+    {% else %}
+        <div class="well">{{ 'No posts found'|trans }}</div>
+    {% endfor %}
+
+    <div class="navigation text-center">
+        {{ pagerfanta(posts, 'twitter_bootstrap3_translated', { routeName: 'microblog_posts_paginated' }) }}
+    </div>
+{% endblock %}
