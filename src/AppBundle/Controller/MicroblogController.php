@@ -21,8 +21,6 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class MicroblogController
  * @package AppBundle\Controller
- *
- * @Route("/microblog")
  */
 class MicroblogController extends Controller
 {

@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>{{ 'Posts'|trans }}</h1>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">{{ 'Title'|trans }}</th>
+                <th scope="col"><i class="fa fa-user" aria-hidden="true"></i> {{ 'Author'|trans }}</th>
+                <th scope="col"><i class="fa fa-calendar" aria-hidden="true"></i> {{ 'Created on'|trans }}</th>
+                <th scope="col"><i class="fa fa-cogs" aria-hidden="true"></i> {{ 'Actions'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for post in posts %}
+            <tr>
+                <td>{{ post.title }}</td>
+                <td>{{ post.author }}</td>
+                <td>{% if post.createdOn %}{{ post.createdOn|date('d.m.Y') }}{% endif %}</td>
+                <td>
+                    <div class="item-actions">
+                        {#<a href="{{ path('admin_post_show', { id: post.id }) }}" class="btn btn-sm btn-default">#}
+                            {{ 'Show'|trans }}
+                        {#</a>#}
+
+                        {#{% if post.isAuthor(app.user) %}#}
+                            {#<a href="{{ path('admin_post_edit', { id: post.id }) }}" class="btn btn-sm btn-primary">#}
+                                {#<i class="fa fa-edit" aria-hidden="true"></i> {{ 'action.edit'|trans }}#}
+                            {#</a>#}
+                        {#{% endif %}#}
+                    </div>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4" align="center">{{ 'No posts'|trans }}</td>
+           </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="section actions">
+        <a href="{{ path('admin_post_new') }}" class="btn btn-lg btn-block btn-success">
+            <i class="fa fa-plus" aria-hidden="true"></i> {{ 'New post'|trans }}
+        </a>
+    </div>
+{% endblock %}

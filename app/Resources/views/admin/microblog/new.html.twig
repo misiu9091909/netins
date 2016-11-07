@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>{{ 'New post'|trans }}</h1>
+
+    {{ form_start(form) }}
+        {{ form_row(form.title) }}
+        {{ form_row(form.body) }}
+        {{ form_row(form.author) }}
+        {{ form_row(form.image_name) }}
+
+        <input type="submit" value="{{ 'Submit'|trans }}" class="btn btn-primary" />
+
+        <a href="{{ path('admin_index') }}" class="btn btn-link">
+            {{ 'Back to posts list'|trans }}
+        </a>
+    {{ form_end(form) }}
+{% endblock %}
