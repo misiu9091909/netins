@@ -1,13 +1,15 @@
 {% extends 'base.html.twig' %}
-
+{% block title %}
+    Posts - {{ parent() }}
+{% endblock %}
 {% block body %}
     {% for post in posts %}
         <article class="post">
-            <h2>
+            <h3>
                 <a href="{{ path('microblog_single_post', { slug: post.slug }) }}">
                     {{ post.title }}
                 </a>
-            </h2>
+            </h3>
 
             {{ post.body }}
         </article>

@@ -10,3 +10,8 @@ services:
 
     slugger:
         class: AppBundle\Utils\Slugger
+
+
+    uploader:
+        class: AppBundle\Utils\Uploader
+        arguments: ['%images_dir%']

@@ -5,8 +5,6 @@ namespace AppBundle\Repository;
 use AppBundle\Entity\Post;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
-use Pagerfanta\Adapter\DoctrineORMAdapter;
-use Pagerfanta\Pagerfanta;
 
 /**
  * PostRepository
@@ -17,11 +15,15 @@ use Pagerfanta\Pagerfanta;
 class PostRepository extends EntityRepository
 {
     /**
-     * @return Query
+     * @param int $page
      */
-    public function queryLatest()
+    public function findLatest($page = 1, $items = 10)
     {
-        return $this->getEntityManager()
+        $page = (int) $page;
+        $items = (int) $items;
+        $firstResultIndex = ($page - 1) * $items;
+        $maxResults = $items;
+        $query = $this->getEntityManager()
             ->createQuery('
                 SELECT p
                 FROM AppBundle:Post p
@@ -29,18 +31,9 @@ class PostRepository extends EntityRepository
                 ORDER BY p.created_on DESC
             ')
             ->setParameter('now', new \DateTime())
-            ;
-    }
-
-    /**
-     * @param int $page
-     *
-     * @return Pagerfanta
-     */
-    public function findLatest($page = 1, $items = 10)
-    {
-        $ormAdapter = new DoctrineORMAdapter($this->queryLatest(), false);
-        $posts = $ormAdapter->getSlice(($page - 1) * $items, $items);
+            ->setFirstResult($firstResultIndex)
+            ->setMaxResults($items);
+        $posts = $query->getResult();
         return $posts;
     }
 }

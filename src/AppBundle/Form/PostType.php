@@ -2,11 +2,13 @@
 namespace AppBundle\Form;
 
 use AppBundle\Entity\Post;
+use AppBundle\Transformer\View\StringToFileTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class PostType extends AbstractType
 {
@@ -27,9 +29,12 @@ class PostType extends AbstractType
                 'label' => 'Author',
             ])
             ->add('image_name', FileType::class, [
-                'label' => 'Image'
+                'label' => 'Image',
+                'required' => false
             ])
+            ->add('original_image_name', HiddenType::class)
         ;
+        $builder->get('image_name')->addViewTransformer(new StringToFileTransformer());
     }
 
     /**

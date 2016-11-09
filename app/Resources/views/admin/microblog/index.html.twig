@@ -20,9 +20,10 @@
                 <td>{% if post.createdOn %}{{ post.createdOn|date('d.m.Y') }}{% endif %}</td>
                 <td>
                     <div class="item-actions">
-                        {#<a href="{{ path('admin_post_show', { id: post.id }) }}" class="btn btn-sm btn-default">#}
+                        <a href="{{ path('microblog_single_post', { slug: post.slug }) }}" class="btn btn-sm btn-default">
                             {{ 'Show'|trans }}
-                        {#</a>#}
+                        </a>
+                        <a href="{{ path('admin_post_edit', {postId: post.id}) }}">Edit</a>
 
                         {#{% if post.isAuthor(app.user) %}#}
                             {#<a href="{{ path('admin_post_edit', { id: post.id }) }}" class="btn btn-sm btn-primary">#}

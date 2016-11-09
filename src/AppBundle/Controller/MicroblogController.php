@@ -20,14 +20,17 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class MicroblogController
+ *
+ * @Route("/")
+ *
  * @package AppBundle\Controller
  */
 class MicroblogController extends Controller
 {
     /**
+     * @Route("/", defaults={"pageNumber": 1}, name="microblog_posts")
+     * @Route("/{pageNumber}", name="microblog_posts_page", requirements={"pageNumber": "[1-9][0-9]*"})
      * @Method("GET")
-     * @Route("/", name="microblog_posts", defaults={"pageNumber": 1})
-     * @Route("/page/{pageNumber}", name="microblog_posts_page", requirements={"page": "[1-9][0-9]*"})
      */
     public function indexAction($pageNumber)
     {

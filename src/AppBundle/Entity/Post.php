@@ -201,6 +201,16 @@ class Post
         return $this->getImageName();
     }
 
+    public function getOriginalImageName()
+    {
+        return $this->getImageName();
+    }
+
+    public function setOriginalImageName($name)
+    {
+
+    }
+
     /**
      * Set created_on
      *

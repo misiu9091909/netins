@@ -35,14 +35,34 @@ class MicroblogController extends Controller
     }
 
     /**
-     * @Route("/new", name="admin_post_new")
+     * Route("/new", name="admin_post_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
     {
         $post = new Post();
+
+    }
+
+    /**
+     * @param Request $request
+     * @Route("/edit/{postId}", name="admin_post_edit", requirements={"postId": "[1-9][0-9]*"})
+     * @Route("/new", name="admin_post_new")
+     */
+    public function editAction(Request $request, $postId = null)
+    {
+        $title = '';
+        if ($postId) {
+            $post = $this->getDoctrine()->getEntityManager()->find(Post::class, $postId);
+        }
+        if (!isset($post)) {
+            $post = new Post();
+            $title = 'New post';
+        } else {
+            $title = 'Edit post ' . $post->getTitle();
+        }
         $form = $this->createForm(PostType::class, $post)
-            ->add('saveAndPostType.php', SubmitType::class);
+            ->add('save', SubmitType::class);
 
         $form->handleRequest($request);
 
@@ -50,6 +70,14 @@ class MicroblogController extends Controller
             $post->setSlug($this->get('slugger')->slugify($post->getTitle()));
             $post->setCreatedOn(new \DateTime('now'));
             $post->setUpdatedOn(new \DateTime('now'));
+            $file = $post->getImageName();
+            if ($file) {
+                $fileName = $this->get('uploader')->upload($file);
+                $post->setImageName($fileName);
+                $post->setOriginalImageName($fileName);
+            } else {
+                $post->setImageName($post->getOriginalImageName());
+            }
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($post);
             $entityManager->flush();
@@ -57,9 +85,10 @@ class MicroblogController extends Controller
             return $this->redirectToRoute('admin_index');
         }
 
-        return $this->render('admin/microblog/new.html.twig', [
+        return $this->render('admin/microblog/edit.html.twig', [
             'post' => $post,
             'form' => $form->createView(),
+            'title' => $title
         ]);
     }
 }
