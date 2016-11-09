@@ -28,13 +28,12 @@ class PostType extends AbstractType
             ->add('author', null, [
                 'label' => 'Author',
             ])
-            ->add('image_name', FileType::class, [
+            ->add('image', null, [
                 'label' => 'Image',
                 'required' => false
             ])
-            ->add('original_image_name', HiddenType::class)
         ;
-        $builder->get('image_name')->addViewTransformer(new StringToFileTransformer());
+//        $builder->get('image')->addViewTransformer(new StringToFileTransformer());
     }
 
     /**

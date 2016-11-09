@@ -1,6 +1,22 @@
 {% block nav %}
-<nav>
-    <a href="{{ path("microblog_posts") }}">Home</a>
-    <a href="{{ path("admin_index") }}">Admin</a>
-</nav>
+    <nav>
+        <a href="{{ path("microblog_posts") }}">Home</a>
+        <a href="{{ path("admin_index") }}">Admin</a>
+    </nav>
+    <div class="messages">
+        {% if app.session.flashBag.has('success') %}
+            <div class="alert alert-success">
+                {% for msg in app.session.flashBag.get('success') %}
+                    {{ msg }}
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% if app.session.flashBag.has('error') %}
+            <div class="alert alert-error">
+                {% for msg in app.session.flashBag.get('error') %}
+                    {{ msg }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}

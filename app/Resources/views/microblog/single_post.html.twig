@@ -8,7 +8,9 @@
         <div class="post-subtitle">
             <span class="post-date-created">{{ post.createdOn|date }}</span>, <span class="post-author">{{ post.author }}</span>
         </div>
-        <div class="post-image"><img src="{{ asset('uploads/images/') ~ post.imageUrl }}"></div>
+        {% if post.imageName %}
+            <div class="post-image"><img src="{{ asset('uploads/images/') ~ post.imageName }}" width="250"></div>
+        {% endif %}
         <div class="post-content">{{ post.body }}</div>
     </article>
 {% endblock %}

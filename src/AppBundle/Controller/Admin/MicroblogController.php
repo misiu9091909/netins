@@ -12,7 +12,6 @@ use AppBundle\Entity\Post;
 use AppBundle\Form\PostType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,22 +34,13 @@ class MicroblogController extends Controller
     }
 
     /**
-     * Route("/new", name="admin_post_new")
-     * @Method({"GET", "POST"})
-     */
-    public function newAction(Request $request)
-    {
-        $post = new Post();
-
-    }
-
-    /**
      * @param Request $request
      * @Route("/edit/{postId}", name="admin_post_edit", requirements={"postId": "[1-9][0-9]*"})
      * @Route("/new", name="admin_post_new")
      */
     public function editAction(Request $request, $postId = null)
     {
+
         $title = '';
         if ($postId) {
             $post = $this->getDoctrine()->getEntityManager()->find(Post::class, $postId);
@@ -65,18 +55,14 @@ class MicroblogController extends Controller
             ->add('save', SubmitType::class);
 
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $post->setSlug($this->get('slugger')->slugify($post->getTitle()));
             $post->setCreatedOn(new \DateTime('now'));
             $post->setUpdatedOn(new \DateTime('now'));
-            $file = $post->getImageName();
+            $file = $post->getImage();
             if ($file) {
                 $fileName = $this->get('uploader')->upload($file);
                 $post->setImageName($fileName);
-                $post->setOriginalImageName($fileName);
-            } else {
-                $post->setImageName($post->getOriginalImageName());
             }
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($post);
@@ -90,5 +76,38 @@ class MicroblogController extends Controller
             'form' => $form->createView(),
             'title' => $title
         ]);
+    }
+
+    /**
+     * @Route("/delete/{postId}", name="admin_post_delete", requirements={"postId": "[1-9][0-9]*"})
+     *
+     */
+    public function deleteAction(Request $request, $postId)
+    {
+        $post = $this->getDoctrine()->getEntityManager()->find('AppBundle:Post', $postId);
+        if ($post) {
+            $this->getDoctrine()->getEntityManager()->remove($post);
+            $this->getDoctrine()->getEntityManager()->flush();
+            $this->addFlash('success', 'Post removed');
+        } else {
+            $this->addFlash('error', 'Error, post was not found');
+        }
+        return $this->redirectToRoute('admin_index');
+    }
+
+    /**
+     * @param Request $request
+     * @param $postId
+     * @Route("/removeImage/{postId}", name="admin_post_removeimage", requirements={"postId": "[1-9][0-9]*"})
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function removeImage(Request $request, $postId)
+    {
+        $post = $this->getDoctrine()->getEntityManager()->find('AppBundle:Post', $postId);
+        $post->setImageName('');
+        $this->getDoctrine()->getEntityManager()->persist($post);
+        $this->getDoctrine()->getEntityManager()->flush();
+        $this->addFlash('success', 'Post\'s image removed');
+        return $this->redirectToRoute('admin_index');
     }
 }

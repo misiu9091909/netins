@@ -3,6 +3,8 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * Post
@@ -69,6 +71,28 @@ class Post
      * @ORM\Column(name="updated_on", type="datetime")
      */
     private $updated_on;
+
+    /**
+     * @Assert\File(maxSize="5000000")
+     */
+    public $image;
+
+    /**
+     * @return mixed
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param mixed $image
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+    }
+
 
 
     /**
@@ -201,15 +225,6 @@ class Post
         return $this->getImageName();
     }
 
-    public function getOriginalImageName()
-    {
-        return $this->getImageName();
-    }
-
-    public function setOriginalImageName($name)
-    {
-
-    }
 
     /**
      * Set created_on
@@ -255,5 +270,14 @@ class Post
     public function getUpdatedOn()
     {
         return $this->updated_on;
+    }
+
+    public function getExcerpt()
+    {
+        $body = $this->getBody();
+        $words = explode(' ', $body, 21);
+        $excerptWords = array_slice($words, 0, 20);
+        $excerpt = join(' ', $excerptWords);
+        return $excerpt;
     }
 }

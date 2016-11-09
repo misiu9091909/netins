@@ -22,14 +22,10 @@
                     <div class="item-actions">
                         <a href="{{ path('microblog_single_post', { slug: post.slug }) }}" class="btn btn-sm btn-default">
                             {{ 'Show'|trans }}
-                        </a>
-                        <a href="{{ path('admin_post_edit', {postId: post.id}) }}">Edit</a>
-
-                        {#{% if post.isAuthor(app.user) %}#}
-                            {#<a href="{{ path('admin_post_edit', { id: post.id }) }}" class="btn btn-sm btn-primary">#}
-                                {#<i class="fa fa-edit" aria-hidden="true"></i> {{ 'action.edit'|trans }}#}
-                            {#</a>#}
-                        {#{% endif %}#}
+                        </a> |
+                        <a href="{{ path('admin_post_edit', {postId: post.id}) }}">Edit</a> |
+                        <a href="{{ path('admin_post_removeimage', {postId: post.id}) }}">Remove image</a> |
+                        <a href="{{ path('admin_post_delete', {postId: post.id }) }}">Delete</a>
                     </div>
                 </td>
             </tr>

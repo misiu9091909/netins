@@ -11,7 +11,14 @@
                 </a>
             </h3>
 
-            {{ post.body }}
+            {% if post.imageName %}
+                <div class="post-thumbnail">
+                    <img src="{{ asset('uploads/images/') ~ post.imageName }}" width="150" >
+                </div>
+            {% endif %}
+            <div class="post-body">
+                {{ post.excerpt }} <a href="{{ path('microblog_single_post', { slug: post.slug }) }}">(...)</a>
+            </div>
         </article>
     {% else %}
         <div class="well">{{ 'No posts found'|trans }}</div>

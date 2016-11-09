@@ -5,14 +5,16 @@
 {% block body %}
     <h1>{{ title }}</h1>
 
-    {{ form_start(form) }}
+    {{ form_start(form, {'attr':{'class': 'edit-form'}}) }}
         {{ form_row(form.title) }}
         {{ form_row(form.body) }}
         {{ form_row(form.author) }}
         <div class="image-preview">
-            <img src="{{ asset('uploads/images/') ~ post.imageName }}">
+            {% if post.imageName %}
+                <img width=100 src="{{ asset('uploads/images/') ~ post.imageName }}">
+            {%  endif %}
         </div>
-        {{ form_row(form.image_name) }}
+        {{ form_row(form.image) }}
 
         <a href="{{ path('admin_index') }}" class="btn btn-link">
             {{ 'Back to posts list'|trans }}
